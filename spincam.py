@@ -2,7 +2,7 @@ import os
 import atexit
 from warnings import warn
 from contextlib import suppress
-from datetime import datetime
+import datetime
 import PySpin
 import numpy as np
 
@@ -119,25 +119,22 @@ def __get_image_and_avg(cam,num_to_avg):
 				if i == 0:
 					img_array=np.array(image.GetNDArray(),dtype=np.float)
 					arr = img_array
-					print('Frame: '+str(datetime.now()))
 				else:
 					img_array=np.array(image.GetNDArray(),dtype=np.float)
 					arr=arr+img_array
-					print('Frame: '+str(datetime.now()))
 			else:
 				print('Incomplete Image')
-			image.Release()
+		image.Release()
 		image_dict['data'] = arr/num_to_avg
 		image_dict['timestamp'] = image.GetTimeStamp()
-		print('Averaged Frame: '+str(datetime.now()))
+		print('Averaged Frame: '+str(datetime.datetime.now()))
 		image_dict['bitsperpixel'] = image.GetBitsPerPixel()
 	except PySpin.SpinnakerException as ex:
 		print('Error: %s' % ex)
 		return False
 	except RuntimeError:
 		print(sys.exc_info()[0])
-	except:
-		print('Yikes! Other error')
+
         
 	return image_dict
 	
@@ -211,8 +208,8 @@ def find_cam(cam_serial):
 
     # Assign camera
     __CAM = cam
+    return __CAM
 
-    print('Found camera')	
 
 def disable_auto_exp():
 	print('Disabling Auto Exposure')	
